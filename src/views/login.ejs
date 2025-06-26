@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhisperRoom</title>
+  </head>
+  <body>
+    <h1>Please Login</h1>
+    
+  <%- include("./errors.ejs") %>
+
+    <form action="/login" method="POST">
+      <div>
+      <label for="email">Email: </label>
+      <input placeholder="fathysameh@mail.com" type="email" name="email" id="email" />
+      </div>
+
+      <div>
+      <label for="passowrd">Passowrd: </label>
+      <input  type="password" name="password" id="password" />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>

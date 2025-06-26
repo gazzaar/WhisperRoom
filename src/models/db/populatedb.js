@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name varchar(50),
     last_name varchar(50),
-    username varchar(100) UNIQUE,
+    email varchar(100) UNIQUE,
     is_member BOOLEAN,
     password varchar(255)
 );
