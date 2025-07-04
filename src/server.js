@@ -8,6 +8,9 @@ import loginRouter from './routes/login.js';
 import pool from './models/pool.js';
 import connectPgSimple from 'connect-pg-simple';
 import session from 'express-session';
+import passport from 'passport';
+import './config/passport.js';
+
 const connectPg = connectPgSimple(session);
 const sessionStore = new connectPg({
   pool: pool,
@@ -25,6 +28,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Get current user accross your template
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 // Setting up session
 app.use(
   session({
@@ -38,19 +47,19 @@ app.use(
   }),
 );
 
-app.get('/', (req, res) => {
-  if (req.session.viewCount) {
-    req.session.viewCount++;
-  } else {
-    req.session.viewCount = 1;
-  }
-  res.send(`hello world, you viewed our page ${req.session.viewCount} times!`);
+app.use(passport.session());
 
-  res.end();
+app.get('/', (req, res) => {
+  res.render('sign-up');
 });
 
 app.use('/login', loginRouter);
 app.use('/sign-up', signUpRouter);
+
+app.get('/login-success', (req, res) => {
+  res.render('login-success');
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
