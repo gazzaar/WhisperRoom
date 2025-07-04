@@ -65,7 +65,7 @@ export const loginMember = [
       });
     }
     passport.authenticate('local', {
-      successRedirect: '/login-success',
+      successRedirect: '/login',
       failureRedirect: '/login',
     })(req, res, next); // Call as middleware
   },

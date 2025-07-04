@@ -6,21 +6,25 @@
     <title>WhisperRoom</title>
   </head>
   <body>
-    <h1>Please Login</h1>
-    
-  <%- include("./errors.ejs") %>
+    <% if (locals.currentUser) { %>
+      <h1>WELCOME BACK <%= currentUser.email %></h1>
+      <a href="/logout">LOG OUT</a>
+    <% } else { %>
+      <h1>Please Login</h1>
+      
+      <%- include("./errors.ejs") %>
 
-    <form action="/login" method="POST">
-      <div>
-      <label for="email">Email: </label>
-      <input placeholder="fathysameh@mail.com" type="email" name="email" id="email" />
-      </div>
-
-      <div>
-      <label for="passowrd">Passowrd: </label>
-      <input  type="password" name="password" id="password" />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+      <form action="/login" method="POST">
+        <div>
+          <label for="email">Email: </label>
+          <input placeholder="fathysameh@mail.com" type="email" name="email" id="email" />
+        </div>
+        <div>
+          <label for="password">Password: </label>
+          <input type="password" name="password" id="password" />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    <% } %>
   </body>
 </html>

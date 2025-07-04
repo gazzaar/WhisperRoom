@@ -60,6 +60,13 @@ app.get('/login-success', (req, res) => {
   res.render('login-success');
 });
 
+app.get('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+    res.redirect('/login');
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
