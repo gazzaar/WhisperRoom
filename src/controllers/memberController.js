@@ -82,5 +82,48 @@ export const loginMember = [
     })(req, res, next);
   },
 ];
+
+export const joinClub = [
+  validateJoin,
+  async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.redirect('login');
+      }
+
+      if (req.user.is_member) {
+        return res.render('join-club', {
+          errors: [{ msg: 'Your are already a member' }],
+        });
+      }
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).render('join-club', {
+          errors: errors.array(),
+        });
+      }
+      const { passcode } = req.body;
+      if (passcode !== process.env.SECRET_PASSCODE) {
+        return res.status(400).render('join-club', {
+          errors: [{ msg: 'Invalid passcode' }],
+        });
+      }
+
+      const updatedUser = await updateMembership(req.user.id);
+      req.login(updatedUser, (err) => {
+        if (err) {
+          console.error(`Error updating session: ${err}`);
+          return res.status(500).render('join-club', {
+            errors: [{ msg: 'Server Error please try again later' }],
+          });
+        }
+        res.redirect('login');
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).render('join-club', {
+        errors: [{ msg: 'Server error, please try again later' }],
+      });
+    }
   },
 ];
