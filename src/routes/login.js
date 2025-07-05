@@ -3,7 +3,15 @@ import { loginMember } from '../controllers/memberController.js';
 const loginRouter = Router();
 
 loginRouter.get('/', (req, res) => {
-  res.render('login', { currentUser: req.user });
+  // Check for passport failure messages
+  const errors = req.session.messages ? [{ msg: req.session.messages }] : [];
+  // Clear the messages after using them
+  delete req.session.messages;
+
+  res.render('login', {
+    currentUser: req.user,
+    errors: errors,
+  });
 });
 
 loginRouter.post('/', loginMember);
