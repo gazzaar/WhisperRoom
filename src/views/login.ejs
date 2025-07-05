@@ -9,6 +9,11 @@
   </head>
   <body>
     <div class="container">
+
+      <% if (locals.errors && errors.length > 0) { %>
+      <div class="errors"><%- include("./errors.ejs") %></div>
+      <% } %>
+
       <% if (locals.currentUser) { %>
       <div class="welcome-message">
         <h1>WELCOME BACK <%= currentUser?.email %></h1>
@@ -19,16 +24,17 @@
         <h2>You are not a member</h2>
         <div><a href="/join-club">Become A member now</a></div>
       </div>
-      <% } %>
+
+      <% } else if(locals.currentUser.is_member) { %>
+      <div><a href="/messages">Go to messages</a></div>
+      <div><a href="/create-message">Create new message</a></div>
+
+     <% } %>
       <div class="link-container">
         <a href="/logout" class="logout-btn">LOG OUT</a>
       </div>
       <% } else { %>
       <h1>Please Login</h1>
-
-      <% if (locals.errors && errors.length > 0) { %>
-      <div class="errors"><%- include("./errors.ejs") %></div>
-      <% } %>
 
       <form action="/login" method="POST">
         <div class="form-group">

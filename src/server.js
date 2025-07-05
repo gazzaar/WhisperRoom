@@ -11,6 +11,7 @@ import pool from './models/pool.js';
 import joinClubRouter from './routes/joinClubRouter.js';
 import loginRouter from './routes/login.js';
 import signUpRouter from './routes/signUp.js';
+import addNewMessageRouter from './routes/addMessageRouter.js';
 
 const connectPg = connectPgSimple(session);
 const sessionStore = new connectPg({
@@ -46,7 +47,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 Day
     },
-  })
+  }),
 );
 
 app.use(passport.session());
@@ -58,6 +59,7 @@ app.get('/', (req, res) => {
 app.use('/login', loginRouter);
 app.use('/sign-up', signUpRouter);
 app.use('/join-club', joinClubRouter);
+app.use('/create-message', addNewMessageRouter);
 
 app.get('/login-success', (req, res) => {
   if (req.isAuthenticated()) {
