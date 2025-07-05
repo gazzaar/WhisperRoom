@@ -3,27 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WhisperRoom - Creata message</title>
+    <title>WhisperRoom - Create Message</title>
+    <link rel="stylesheet" href="/css/create-message.css" />
     <link rel="stylesheet" href="/css/errors.css" />
   </head>
   <body>
+    <div class="container">
+      <h1>Create Message</h1>
 
       <% if (locals.errors && errors.length > 0) { %>
       <div class="errors"><%- include("./errors.ejs") %></div>
       <% } %>
 
-    <div class="container">
       <form action="/create-message" method="POST">
         <div class="form-group">
-          <input type="text" name="title" id="title" placeholder="Enter message title:">
+          <label for="title">Message Title</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Enter message title"
+            required
+          />
         </div>
         <div class="form-group">
-          <textarea rows="10" cols="40"  name="message_text" id="message_text" placeholder="Enter text here"></textarea>
+          <label for="message_text">Message Content</label>
+          <textarea
+            name="message_text"
+            id="message_text"
+            placeholder="Enter your message here..."
+            required
+          ></textarea>
         </div>
         <button type="submit">Create Message</button>
       </form>
 
-      <a href="/messages">Go to messages</a>
+      <div class="link-container">
+        <a href="/messages">← Back to Messages</a>
+      </div>
     </div>
+
+    <script>
+      // Add loading state to form submission
+      document.querySelector('form').addEventListener('submit', function (e) {
+        const button = document.querySelector('button[type="submit"]');
+        button.classList.add('loading');
+        button.textContent = 'Creating...';
+      });
+
+      // Auto-resize textarea
+      const textarea = document.getElementById('message_text');
+      textarea.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 300) + 'px';
+      });
+    </script>
   </body>
 </html>
