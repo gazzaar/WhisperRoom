@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhisperRoom - Join the Club</title>
+    <link rel="stylesheet" href="/css/join-club.css" />
+    <link rel="stylesheet" href="/css/errors.css" />
+  </head>
+  <body>
+    <div class="container">
+      <% if (locals.currentUser && locals.currentUser.is_member) { %>
+      <div class="member-status">
+        <h1>You are already a member of the WhisperRoom Club!</h1>
+        <div class="link-container">
+          <a href="/logout" class="logout-btn">Log Out</a>
+        </div>
+      </div>
+      <% } else if (!locals.currentUser.is_member) { %>
+      <div class="join-club-header">
+        <h1>Join the WhisperRoom Club</h1>
+      </div>
+
+      <% if (locals.errors && errors.length > 0) { %>
+      <div class="errors"><%- include("./errors.ejs") %></div>
+      <% } %>
+
+      <form action="/join-club" method="POST">
+        <div class="secret-passcode">
+          <label for="passcode">Secret Passcode: </label>
+          <input
+            type="text"
+            name="passcode"
+            id="passcode"
+            placeholder="Enter the secret passcode"
+            required
+          />
+        </div>
+        <button type="submit">Join Club</button>
+      </form>
+
+      <div class="link-container">
+        <a href="/logout" class="logout-btn">Log Out</a>
+      </div>
+      <% } else { %>
+      <h1>Please Log In to Join the Club</h1>
+      <div class="link-container">
+        <a href="/login">Log In</a>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>

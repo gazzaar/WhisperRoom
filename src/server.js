@@ -1,15 +1,16 @@
 import bodyParser from 'body-parser';
+import connectPgSimple from 'connect-pg-simple';
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import signUpRouter from './routes/signUp.js';
-import loginRouter from './routes/login.js';
-import pool from './models/pool.js';
-import connectPgSimple from 'connect-pg-simple';
 import session from 'express-session';
 import passport from 'passport';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import './config/passport.js';
+import pool from './models/pool.js';
+import joinClubRouter from './routes/joinClubRouter.js';
+import loginRouter from './routes/login.js';
+import signUpRouter from './routes/signUp.js';
 
 const connectPg = connectPgSimple(session);
 const sessionStore = new connectPg({
@@ -27,6 +28,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/css', express.static(path.join(__dirname, 'views/css')));
 
 // Get current user accross your template
 app.use((req, res, next) => {
@@ -44,20 +46,25 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 Day
     },
-  }),
+  })
 );
 
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-  res.render('sign-up');
+  res.render('index');
 });
 
 app.use('/login', loginRouter);
 app.use('/sign-up', signUpRouter);
+app.use('/join-club', joinClubRouter);
 
 app.get('/login-success', (req, res) => {
-  res.render('login-success');
+  if (req.isAuthenticated()) {
+    res.render('login-success', { currentUser: req.user });
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.get('/logout', (req, res, next) => {

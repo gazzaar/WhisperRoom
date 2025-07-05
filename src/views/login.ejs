@@ -3,28 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WhisperRoom</title>
+    <title>WhisperRoom - Login</title>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="/css/errors.css" />
   </head>
   <body>
-    <% if (locals.currentUser) { %>
-      <h1>WELCOME BACK <%= currentUser.email %></h1>
-      <a href="/logout">LOG OUT</a>
-    <% } else { %>
+    <div class="container">
+      <% if (locals.currentUser) { %>
+      <div class="welcome-message">
+        <h1>WELCOME BACK <%= currentUser?.email %></h1>
+      </div>
+
+      <% if (!locals.currentUser.is_member) { %>
+      <div class="member-status">
+        <h2>You are not a member</h2>
+        <div><a href="/join-club">Become A member now</a></div>
+      </div>
+      <% } %>
+      <div class="link-container">
+        <a href="/logout" class="logout-btn">LOG OUT</a>
+      </div>
+      <% } else { %>
       <h1>Please Login</h1>
-      
-      <%- include("./errors.ejs") %>
+
+      <% if (locals.errors && errors.length > 0) { %>
+      <div class="errors"><%- include("./errors.ejs") %></div>
+      <% } %>
 
       <form action="/login" method="POST">
-        <div>
+        <div class="form-group">
           <label for="email">Email: </label>
-          <input placeholder="fathysameh@mail.com" type="email" name="email" id="email" />
+          <input
+            placeholder="fathysameh@mail.com"
+            type="email"
+            name="email"
+            id="email"
+          />
         </div>
-        <div>
+        <div class="form-group">
           <label for="password">Password: </label>
           <input type="password" name="password" id="password" />
         </div>
         <button type="submit">Login</button>
       </form>
-    <% } %>
+      <% } %>
+    </div>
   </body>
 </html>
