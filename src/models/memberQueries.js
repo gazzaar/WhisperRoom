@@ -24,4 +24,17 @@ const getMember = async (email) => {
   }
 };
 
-export { addMember, getMember };
+const updateMembership = async (userId) => {
+  try {
+    const { rows } = await pool.query(
+      'UPDATE users SET is_member = true WHERE id = $1 RETURNING *',
+      [userId],
+    );
+    return rows[0] || null;
+  } catch (err) {
+    console.error(`Error Updating member: ${err}`);
+    throw err;
+  }
+};
+
+export { addMember, getMember, updateMembership };
