@@ -35,7 +35,6 @@ export const addNewMessage = [
       .split('.')[0];
     // Example output: "2025-07-05 16:32:31"
     const { title: messageTitle, message_text: messageText } = req.body;
-    console.log(messageTitle, messageText);
     try {
       await addMessage(messageTitle, messageDate, messageText, req.user.id);
       res.render('login-success');
