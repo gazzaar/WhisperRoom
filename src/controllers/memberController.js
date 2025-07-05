@@ -64,9 +64,23 @@ export const loginMember = [
         errors: errors.array(),
       });
     }
-    passport.authenticate('local', {
-      successRedirect: '/login',
-      failureRedirect: '/login',
-    })(req, res, next); // Call as middleware
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        // Store the error message in session
+        req.session.messages = info.message;
+        return res.redirect('/login');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect('/login');
+      });
+    })(req, res, next);
+  },
+];
   },
 ];
