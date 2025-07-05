@@ -1,8 +1,10 @@
-import { body, validationResult } from 'express-validator';
-import pool from '../models/pool.js';
 import bcrypt from 'bcryptjs';
-import { addMember, getMember } from '../models/memberQueries.js';
+import dotenv from 'dotenv';
+import { body, validationResult } from 'express-validator';
 import passport from '../config/passport.js';
+import { addMember, updateMembership } from '../models/memberQueries.js';
+
+dotenv.config();
 const alphaErr = 'must only contain letters.';
 const lengthErr = 'must be between 1 and 10 characters.';
 
@@ -30,6 +32,10 @@ const validateLogin = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
+];
+
+const validateJoin = [
+  body('passcode').trim().notEmpty().withMessage('passcode is required'),
 ];
 
 export const createMember = [
