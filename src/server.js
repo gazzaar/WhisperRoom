@@ -12,7 +12,6 @@ import joinClubRouter from './routes/joinClubRouter.js';
 import loginRouter from './routes/login.js';
 import signUpRouter from './routes/signUp.js';
 import addNewMessageRouter from './routes/addMessageRouter.js';
-import messagesRouter from './routes/messages.js';
 import indexRouter from './routes/index.js';
 
 const connectPg = connectPgSimple(session);
