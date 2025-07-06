@@ -9,12 +9,9 @@
   </head>
   <body>
     <div class="container">
-
       <% if (locals.errors && errors.length > 0) { %>
       <div class="errors"><%- include("./errors.ejs") %></div>
-      <% } %>
-
-      <% if (locals.currentUser) { %>
+      <% } %> <% if (locals.currentUser) { %>
       <div class="welcome-message">
         <h1>WELCOME BACK <%= currentUser?.email %></h1>
       </div>
@@ -26,10 +23,10 @@
       </div>
 
       <% } else if(locals.currentUser.is_member) { %>
-      <div><a href="/messages">Go to messages</a></div>
+      <div><a href="/">Go to messages</a></div>
       <div><a href="/create-message">Create new message</a></div>
 
-     <% } %>
+      <% } %>
       <div class="link-container">
         <a href="/logout" class="logout-btn">LOG OUT</a>
       </div>

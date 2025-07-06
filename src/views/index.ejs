@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WhisperRoom - Welcome</title>
+    <title>WhisperRoom - Messages</title>
     <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
@@ -13,22 +13,67 @@
         WhisperRoom
       </a>
       <div class="nav-links">
+        <% if (locals.currentUser) { %>
+        <!-- User is authenticated -->
+        <a href="/create-message" class="nav-link create-link"
+          >Create Message</a
+        >
+        <% if (!currentUser.is_member) { %>
+        <!-- User is authenticated but not a member -->
+        <a href="/join-club" class="nav-link join-link">Join Club</a>
+        <% } %>
+        <a href="/logout" class="nav-link logout-link">Logout</a>
+        <% } else { %>
+        <!-- User is not authenticated -->
         <a href="/login" class="nav-link login-link">Login</a>
         <a href="/sign-up" class="nav-link signup-link">Sign Up</a>
+        <% } %>
       </div>
     </header>
 
     <main class="main-content">
-      <div class="welcome-card">
-        <h1 class="welcome-title">Welcome to WhisperRoom</h1>
-        <p class="welcome-subtitle">
-          A private clubhouse for anonymous storytelling
-        </p>
-        <p class="welcome-description">
-          Where members know the author, but the outside world only hears the
-          whispers. Join our exclusive community and share your stories in a
-          safe, private space.
-        </p>
+      <div class="messages-container">
+        <div class="messages-header">
+          <h1 class="messages-title">WhisperRoom Messages</h1>
+          <p class="messages-subtitle">Anonymous stories from our community</p>
+        </div>
+
+        <% if (locals.messages && messages.length > 0) { %>
+        <div class="messages-grid">
+          <% messages.forEach(function(message) { %>
+          <div class="message-card">
+            <div class="message-header">
+              <h3 class="message-title"><%= message.title %></h3>
+              <div class="message-meta">
+                <% if (locals.currentUser && currentUser.is_member) { %>
+                <span class="message-author"
+                  ><%= message.first_name %> <%= message.last_name %></span
+                >
+                <% }  %>
+                <span class="message-date"
+                  ><%= formatDate(message.created_at) %></span
+                >
+              </div>
+            </div>
+            <div class="message-content">
+              <p><%= message.message_text %></p>
+            </div>
+            <div class="message-footer">
+              <span class="message-id">#<%= message.id %></span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+        <% } else { %>
+        <div class="no-messages">
+          <div class="no-messages-icon">📝</div>
+          <h2>No messages yet</h2>
+          <p>Be the first to share a story in WhisperRoom!</p>
+          <a href="/create-message" class="create-first-btn"
+            >Create First Message</a
+          >
+        </div>
+        <% } %>
       </div>
     </main>
   </body>
