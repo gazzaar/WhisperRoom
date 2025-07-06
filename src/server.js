@@ -12,6 +12,8 @@ import joinClubRouter from './routes/joinClubRouter.js';
 import loginRouter from './routes/login.js';
 import signUpRouter from './routes/signUp.js';
 import addNewMessageRouter from './routes/addMessageRouter.js';
+import messagesRouter from './routes/messages.js';
+import indexRouter from './routes/index.js';
 
 const connectPg = connectPgSimple(session);
 const sessionStore = new connectPg({
@@ -52,14 +54,13 @@ app.use(
 
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+app.use('/', indexRouter);
 
 app.use('/login', loginRouter);
 app.use('/sign-up', signUpRouter);
 app.use('/join-club', joinClubRouter);
 app.use('/create-message', addNewMessageRouter);
+app.use('/messages', messagesRouter);
 
 app.get('/login-success', (req, res) => {
   if (req.isAuthenticated()) {
@@ -72,7 +73,7 @@ app.get('/login-success', (req, res) => {
 app.get('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
-    res.redirect('/login');
+    res.redirect('/');
   });
 });
 
